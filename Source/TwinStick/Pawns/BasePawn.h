@@ -12,6 +12,7 @@ class UCameraComponent;
 class UHealthComponent;
 class UInputComponent;
 class ABaseProjectile;
+class UObjectPoolComponent;
 
 UCLASS()
 class TWINSTICK_API ABasePawn : public APawn
@@ -66,11 +67,14 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Shoot")
 	float FireRate = 0.2f;
 
+	UPROPERTY(EditAnywhere, Category = "Shoot")
+	float FireInputThreshold = 0.2f;
+
 	UPROPERTY(VisibleAnywhere, Category = "Shoot")
 	bool bCanFire = true;
-	
+
 	UPROPERTY(EditAnywhere, Category = "Shoot")
-	TSubclassOf<ABaseProjectile> ProjectileClass;
+	float ProjectileLifeSpan = 5.f;
 
 	// Components
 	UPROPERTY(EditAnywhere, Category = "Mesh")
@@ -87,6 +91,9 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Components")
 	UHealthComponent* HealthComponent;
+
+	UPROPERTY(EditAnywhere, Category = "Components")
+	UObjectPoolComponent* ObjectPoolComponent;
 
 	// Inputs
 	float MoveForwardValue;

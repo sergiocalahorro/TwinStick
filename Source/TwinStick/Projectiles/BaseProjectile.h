@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "../ObjectPool/BasePoolableObject.h"
 #include "BaseProjectile.generated.h"
 
 class UStaticMeshComponent;
 class UProjectileMovementComponent;
 
 UCLASS()
-class TWINSTICK_API ABaseProjectile : public AActor
+class TWINSTICK_API ABaseProjectile : public ABasePoolableObject
 {
 	GENERATED_BODY()
 	
@@ -21,6 +22,12 @@ public:
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	
+	// Activate projectile
+	virtual void Activate() override;
+
+	// Deactivate projectile
+	virtual void Deactivate() override;
 
 protected:
 

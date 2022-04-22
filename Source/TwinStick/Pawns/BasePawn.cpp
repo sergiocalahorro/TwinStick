@@ -10,6 +10,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "../Components/HealthComponent.h"
 #include "../Projectiles/BaseProjectile.h"
+#include "../ObjectPool/ObjectPoolComponent.h"
 
 // Sets default values for this pawn's properties
 ABasePawn::ABasePawn()
@@ -31,6 +32,8 @@ ABasePawn::ABasePawn()
 	// Shooting
 	ShootPoint = CreateDefaultSubobject<USceneComponent>(TEXT("ShootPoint"));
 	ShootPoint->SetupAttachment(RootComponent);
+
+	ObjectPoolComponent = CreateDefaultSubobject<UObjectPoolComponent>(TEXT("ObjectPoolComponent"));
 }
 
 // Called when the game starts or when spawned
@@ -142,19 +145,26 @@ void ABasePawn::UpdatePawnRotation(float DeltaSeconds)
 void ABasePawn::FireShot(FVector FireDirection)
 {
 	// If fire stick is pushed in any direction
-	if (FireDirection.SizeSquared() > 0.0f)
+	if (FireDirection.SizeSquared() > FireInputThreshold)
 	{
 		const FRotator FireRotation = FireDirection.Rotation();
 		const FVector ProjectileLocation = GetActorLocation() + FireRotation.RotateVector(ShootPoint->GetRelativeLocation());
 
 		// ToDo: Object Pooling
-		if (ProjectileClass)
+		ABaseProjectile* Projectile = Cast<ABaseProjectile>(ObjectPoolComponent->GetPoolableObject());
+		if (Projectile)
 		{
-			FActorSpawnParameters SpawnParameters;
-			SpawnParameters.Owner = this;
-
-			ABaseProjectile* Projectile = GetWorld()->SpawnActor<ABaseProjectile>(ProjectileClass, ProjectileLocation, FireRotation, SpawnParameters);
+			Projectile->SetOwner(this);
+			Projectile->SetActorLocation(ProjectileLocation);
+			Projectile->SetActorRotation(FireRotation);
+			Projectile->SetLifeSpan(ProjectileLifeSpan);
+			Projectile->Activate();
 		}
+
+		//FActorSpawnParameters SpawnParameters;
+		//SpawnParameters.Owner = this;
+
+		//ABaseProjectile* Projectile = GetWorld()->SpawnActor<ABaseProjectile>(ProjectileClass, ProjectileLocation, FireRotation, SpawnParameters);
 
 		// Allow shooting again after some delay
 		bCanFire = false;

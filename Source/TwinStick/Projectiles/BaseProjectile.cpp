@@ -11,10 +11,10 @@ ABaseProjectile::ABaseProjectile()
 	PrimaryActorTick.bCanEverTick = true;
 
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
+	StaticMesh->OnComponentHit.AddDynamic(this, &ABaseProjectile::OnHit);
 	RootComponent = StaticMesh;
 
 	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
-	StaticMesh->OnComponentHit.AddDynamic(this, &ABaseProjectile::OnHit);
 }
 
 // Called when the game starts or when spawned
@@ -30,6 +30,26 @@ void ABaseProjectile::Tick(float DeltaTime)
 }
 
 /**
+ * Activate projectile
+ */
+void ABaseProjectile::Activate()
+{
+	Super::Activate();
+	ProjectileMovementComponent->Activate();
+	ProjectileMovementComponent->Velocity = GetActorForwardVector() * ProjectileMovementComponent->InitialSpeed;
+}
+
+/**
+ * Deactivate projectile
+ */
+void ABaseProjectile::Deactivate()
+{
+	Super::Deactivate();
+	ProjectileMovementComponent->Deactivate();
+	ProjectileMovementComponent->Velocity = FVector::ZeroVector;
+}
+
+/**
  * Function called whenever this Actor collides with another Actor
  * @param	HitComponent - Actor's component that hit with OtherActor
  * @param	OtherActor - Actor that collided with this Actor
@@ -40,5 +60,11 @@ void ABaseProjectile::Tick(float DeltaTime)
 void ABaseProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
 {
 	UE_LOG(LogTemp, Warning, TEXT("ABaseProjectile::OnHit - HIT!"));
-	Destroy();
+
+	if (OtherActor == GetOwner())
+	{
+		return; 
+	}
+
+	Deactivate();
 }
