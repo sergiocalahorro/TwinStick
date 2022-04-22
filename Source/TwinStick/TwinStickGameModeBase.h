@@ -22,7 +22,7 @@ public:
 	// Constructor
 	ATwinStickGameModeBase();
 
-	// Actor in game died
+	// Function called when an Actor in game died
 	void ActorDied(AActor* DeadActor);
 
 protected:
@@ -30,14 +30,17 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	// Function called when game is started
 	UFUNCTION(BlueprintNativeEvent)
 	void StartGame(); void StartGame_Implementation();
 
+	// Function called when game is over
 	UFUNCTION(BlueprintNativeEvent)
 	void GameOver(bool bWonGame); void GameOver_Implementation(bool bWonGame);
 
 private:
 
+	// Setup game on start
 	void HandleGameStart();
 
 private:

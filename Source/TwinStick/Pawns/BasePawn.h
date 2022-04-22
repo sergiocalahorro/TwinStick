@@ -26,13 +26,11 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	// Setup player inputs
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
-	void HandleDestruction();
-
-#if WITH_EDITOR
-	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
-#endif
+	// Function called when pawn is destroyed
+	virtual void HandleDestruction();
 
 protected:
 
@@ -41,14 +39,22 @@ protected:
 
 private:
 
-	// Movement
+	// Move forward input
 	void MoveForward(float AxisValue);
+
+	// Move right input
 	void MoveRight(float AxisValue);
+
+	// Update pawn rotation based on movement inputs
 	void UpdatePawnRotation(float DeltaSeconds);
 
-	// Shooting
+	// Fire forward input
 	void FireForward(float AxisValue);
+
+	// Fire right input
 	void FireRight(float AxisValue);
+
+	// Shoot in the direction given by fire inputs
 	void FireShot(FVector FireDirection);
 
 private:

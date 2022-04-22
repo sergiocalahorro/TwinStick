@@ -29,13 +29,13 @@ protected:
 
 private:
 
+	// Function called whenever this Actor collides with another Actor
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 
 private:	
 	
 	// Components
-
 	UPROPERTY(EditAnywhere, Category = "Projectile")
 	UStaticMeshComponent* StaticMesh;
 

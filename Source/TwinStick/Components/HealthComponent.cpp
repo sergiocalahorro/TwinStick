@@ -14,7 +14,6 @@ UHealthComponent::UHealthComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 }
 
-
 // Called when the game starts
 void UHealthComponent::BeginPlay()
 {
@@ -25,15 +24,23 @@ void UHealthComponent::BeginPlay()
 	GetOwner()->OnTakeAnyDamage.AddDynamic(this, &UHealthComponent::TakeDamage);
 }
 
-
 // Called every frame
 void UHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
+/**
+ * Function called whenever this component's owner takes any damage
+ * @param	DamagedActor - Actor that received the damage
+ * @param	Damage - Damage amount
+ * @param	DamageType - Type of the damage that was received
+ * @param	Instigator - Damage causer's controller
+ * @param	DamageCauser - Actor that caused the damage
+ */
 void UHealthComponent::TakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, class AController* Instigator, AActor* DamageCauser)
 {
+	// Abort function if damage is equal or less than zero
 	if (Damage <= 0.f)
 	{
 		return;
@@ -49,6 +56,10 @@ void UHealthComponent::TakeDamage(AActor* DamagedActor, float Damage, const UDam
 	}
 }
 
+/**
+ * Check if the component's owner is or not dead
+ * @return	true if health is equal to zero
+ */
 bool UHealthComponent::IsDead() const
 {
 	return Health == 0.f;

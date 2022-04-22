@@ -18,6 +18,9 @@ void ATwinStickGameModeBase::BeginPlay()
 	HandleGameStart();
 }
 
+/*
+ * Setup game on start
+ */
 void ATwinStickGameModeBase::HandleGameStart()
 {
 	BasePawn = Cast<ABasePawn>(UGameplayStatics::GetPlayerPawn(this, 0));
@@ -25,6 +28,10 @@ void ATwinStickGameModeBase::HandleGameStart()
 	StartGame();
 }
 
+/*
+ * Function called when an Actor in game died
+ * @param	DeadActor - Actor that died
+ */
 void ATwinStickGameModeBase::ActorDied(AActor* DeadActor)
 {
 	if (DeadActor == BasePawn)
@@ -39,11 +46,18 @@ void ATwinStickGameModeBase::ActorDied(AActor* DeadActor)
 	}
 }
 
+/*
+ * Function called when game is started
+ */
 void ATwinStickGameModeBase::StartGame_Implementation()
 {
 	// ToDo
 }
 
+/*
+ * Function called when game is over
+ * @param	bWonGame - true if player won the game
+ */
 void ATwinStickGameModeBase::GameOver_Implementation(bool bWonGame)
 {
 	// ToDo

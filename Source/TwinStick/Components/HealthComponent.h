@@ -20,6 +20,7 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	// Check if the component's owner is or not dead
 	UFUNCTION(BlueprintPure)
 	bool IsDead() const;
 
@@ -30,6 +31,7 @@ protected:
 
 private:
 
+	// Function called whenever this component's owner takes any damage
 	UFUNCTION()
 	void TakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, class AController* Instigator, AActor* DamageCauser);
 

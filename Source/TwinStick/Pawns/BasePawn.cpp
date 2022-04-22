@@ -10,8 +10,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "../Components/HealthComponent.h"
 #include "../Projectiles/BaseProjectile.h"
-#include "DrawDebugHelpers.h"
 
+// Sets default values for this pawn's properties
 ABasePawn::ABasePawn()
 {
 	// Mesh setup
@@ -33,11 +33,13 @@ ABasePawn::ABasePawn()
 	ShootPoint->SetupAttachment(RootComponent);
 }
 
+// Called when the game starts or when spawned
 void ABasePawn::BeginPlay()
 {
 	Super::BeginPlay();
 }
 
+// Called every frame
 void ABasePawn::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
@@ -53,11 +55,10 @@ void ABasePawn::Tick(float DeltaSeconds)
 	}
 }
 
-void ABasePawn::HandleDestruction()
-{
-	// ToDo: Particles, sounds, camera shake... on destruction
-}
-
+/*
+ * Setup player inputs
+ * @param PlayerInputComponent - Player's input component
+ */ 
 void ABasePawn::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
@@ -70,6 +71,10 @@ void ABasePawn::SetupPlayerInputComponent(class UInputComponent* PlayerInputComp
 	PlayerInputComponent->BindAxis(TEXT("ShootRight"), this, &ABasePawn::FireRight);
 }
 
+/*
+ * Move forward input
+ * @param AxisValue - Forward input value
+ */
 void ABasePawn::MoveForward(float AxisValue)
 {
 	// Store axis value
@@ -81,6 +86,10 @@ void ABasePawn::MoveForward(float AxisValue)
 	AddActorWorldOffset(Movement, true);
 }
 
+/*
+ * Move right input
+ * @param AxisValue - Right input value
+ */
 void ABasePawn::MoveRight(float AxisValue)
 {
 	// Store axis value
@@ -92,18 +101,30 @@ void ABasePawn::MoveRight(float AxisValue)
 	AddActorWorldOffset(Movement, true);
 }
 
+/*
+ * Fire forward input
+ * @param AxisValue - Forward input value
+ */
 void ABasePawn::FireForward(float AxisValue)
 {
 	// Store axis value
 	FireForwardValue = AxisValue;
 }
 
+/*
+ * Fire right input
+ * @param AxisValue - Right input value
+ */
 void ABasePawn::FireRight(float AxisValue)
 {
 	// Store axis value
 	FireRightValue = AxisValue;
 }
 
+/*
+ * Update pawn rotation based on movement inputs
+ * @param DeltaSeconds - Elapsed seconds each frame
+ */
 void ABasePawn::UpdatePawnRotation(float DeltaSeconds)
 {
 	const FVector MovementDirection = FVector(MoveForwardValue, MoveRightValue, 0.f).GetClampedToMaxSize(1.0f);
@@ -114,9 +135,13 @@ void ABasePawn::UpdatePawnRotation(float DeltaSeconds)
 	}
 }
 
+/*
+ * Shoot in the direction given by fire inputs
+ * @param FireDirection - Shot direction
+ */
 void ABasePawn::FireShot(FVector FireDirection)
 {
-	// If fire stick is pressed in any direction
+	// If fire stick is pushed in any direction
 	if (FireDirection.SizeSquared() > 0.0f)
 	{
 		const FRotator FireRotation = FireDirection.Rotation();
@@ -138,7 +163,10 @@ void ABasePawn::FireShot(FVector FireDirection)
 	}
 }
 
-void ABasePawn::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
+/*
+ * Function called when pawn is destroyed
+ */
+void ABasePawn::HandleDestruction()
 {
-	Super::PostEditChangeProperty(PropertyChangedEvent);
+
 }

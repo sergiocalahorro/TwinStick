@@ -4,7 +4,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
-// Sets default values
+// Sets default values for this actor's properties
 ABaseProjectile::ABaseProjectile()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -29,6 +29,14 @@ void ABaseProjectile::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+/**
+ * Function called whenever this Actor collides with another Actor
+ * @param	HitComponent - Actor's component that hit with OtherActor
+ * @param	OtherActor - Actor that collided with this Actor
+ * @param	OtherComponent - OtherActor's component that hit with this Actor
+ * @param	NormalImpulse - Hit's normal
+ * @param	Hit - Hit's information
+ */
 void ABaseProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
 {
 	UE_LOG(LogTemp, Warning, TEXT("ABaseProjectile::OnHit - HIT!"));
